@@ -17,3 +17,4 @@ spring:
           writetimeout: 5000
           ssl:
             enable: true
+

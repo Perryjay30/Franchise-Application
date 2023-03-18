@@ -31,7 +31,7 @@ class UserServiceImplTest {
     void testThatUserAccountIsCreatedAndVerified() {
         VerifyOtpRequest verifyOtpRequest = new VerifyOtpRequest();
         verifyOtpRequest.setEmailAddress("mrjesus3003@gmail.com");
-        verifyOtpRequest.setToken("3133");
+        verifyOtpRequest.setToken("2628");
         Feedback feedback = userService.createAccount(verifyOtpRequest);
         assertEquals("Registration Successful", feedback.getMessage());
     }
@@ -66,10 +66,10 @@ class UserServiceImplTest {
     @Test
     void testThatUserCanChangePassword() {
         ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
-        changePasswordRequest.setOldPassword("Jesusofnazareth!17");
+        changePasswordRequest.setOldPassword("Jesuschrist@33");
         changePasswordRequest.setNewPassword("Jesusislord#247");
-        Reply response = userService.changePassword("mrjesus3003@gmail.com", changePasswordRequest);
-        assertEquals("Your password has been successfully changed", response.getMessage());
+        String response = userService.changePassword("mrjesus3003@gmail.com", changePasswordRequest);
+        assertEquals("Your password has been successfully changed", response);
     }
 
     @Test

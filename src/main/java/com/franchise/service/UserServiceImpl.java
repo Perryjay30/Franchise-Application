@@ -152,12 +152,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Reply changePassword(String emailAddress, ChangePasswordRequest changePasswordRequest) {
+    public String changePassword(String emailAddress, ChangePasswordRequest changePasswordRequest) {
         User verifiedUser = findUser(emailAddress, "This email isn't registered");
         if(BCrypt.checkpw(changePasswordRequest.getOldPassword(), verifiedUser.getPassword()))
             verifiedUser.setPassword(changePasswordRequest.getNewPassword());
         userRepository.save(verifiedUser);
-        return new Reply("Your password has been successfully changed");
+        return "Your password has been successfully changed";
+//        System.out.println("Your password has been successfully changed");
+//        return verifiedUser.getPassword();
     }
 
     @Override

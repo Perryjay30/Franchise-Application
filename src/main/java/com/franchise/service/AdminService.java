@@ -6,7 +6,7 @@ import com.franchise.data.dtos.response.Reply;
 
 public interface AdminService {
 
-    Reply updateAdminDetails(UpdateAdminRequest updateAdminRequest);
+    Reply updateAdminDetails(String emailAddress, UpdateAdminRequest updateAdminRequest);
 
     String deleteAdmin(String adminId, DeleteUserRequest deleteUserRequest);
 

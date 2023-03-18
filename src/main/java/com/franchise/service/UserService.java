@@ -3,7 +3,6 @@ package com.franchise.service;
 import com.franchise.data.dtos.request.*;
 import com.franchise.data.dtos.response.Feedback;
 import com.franchise.data.dtos.response.Reply;
-import com.mongodb.internal.bulk.DeleteRequest;
 import jakarta.mail.MessagingException;
 
 public interface UserService {
@@ -16,7 +15,7 @@ public interface UserService {
 
     Reply resetPassword(String emailAddress, ResetPasswordRequest resetPasswordRequest);
 
-    Reply changePassword(String emailAddress, ChangePasswordRequest changePasswordRequest);
+    String changePassword(String emailAddress, ChangePasswordRequest changePasswordRequest);
 
     Reply login(LoginRequest loginRequest);
 
