@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface ElectionService {
 
-    Reply createElection(CreateElectionRequest createElectionRequest);
-    Reply updateElection(String electionId, String candidateId, UpdateElectionRequest updateElectionRequest) throws MessagingException;
-    Candidate viewCandidate(String candidateId);
-    List<Candidate> viewAllCandidates();
+    Reply createElection(String adminId, CreateElectionRequest createElectionRequest);
+    Reply updateElection(String adminId, String electionId, String candidateId, UpdateElectionRequest updateElectionRequest) throws MessagingException;
+    void viewElection(String adminId, String electionId);
+    void viewAllElections(String adminId);
 
 
 

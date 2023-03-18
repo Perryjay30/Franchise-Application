@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document
 public class Admin extends User {
-    private String validId;
+    private String uniqueAdminId;
 }
