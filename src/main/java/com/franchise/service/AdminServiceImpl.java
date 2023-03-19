@@ -22,13 +22,13 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
 
-    private final UserService userService;
+//    private final UserService userService;
 
     @Autowired
-    public AdminServiceImpl(UserRepository userRepository, AdminRepository adminRepository, UserService userService) {
+    public AdminServiceImpl(UserRepository userRepository, AdminRepository adminRepository) {
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
-        this.userService = userService;
+
     }
 
     @Override
