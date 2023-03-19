@@ -4,7 +4,6 @@ import com.franchise.data.dtos.request.CandidateRequest;
 import com.franchise.data.dtos.request.UpdateElectionRequest;
 import com.franchise.data.dtos.response.Reply;
 import com.franchise.data.models.Admin;
-import com.franchise.data.models.Candidate;
 import com.franchise.data.models.CreateElectionRequest;
 import com.franchise.data.models.Election;
 import com.franchise.data.repositories.AdminRepository;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -94,9 +92,10 @@ public class ElectionServiceImpl implements ElectionService {
 
 
     @Override
-    public void viewElection(String adminId, String electionId) {
+    public Object viewElection(String adminId, String electionId) {
         Admin registeredAdmin = getRegisteredAdmin(adminId);
         electionRepository.findById(electionId);
+        return null;
     }
 
     private Admin getRegisteredAdmin(String adminId) {
