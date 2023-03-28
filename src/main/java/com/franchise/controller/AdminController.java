@@ -51,4 +51,30 @@ public class AdminController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("viewCandidate/{adminId}/{candidateId}")
+    public ResponseEntity<?> viewElection(@PathVariable String adminId, @PathVariable String candidateId, HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .timeStamp(ZonedDateTime.now())
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .data(adminService.viewCandidate(adminId, candidateId))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("viewAllCandidate/{adminId}")
+    public ResponseEntity<?> viewAllElections(@PathVariable String adminId, HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .timeStamp(ZonedDateTime.now())
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .data(adminService.viewAllCandidates(adminId))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 }

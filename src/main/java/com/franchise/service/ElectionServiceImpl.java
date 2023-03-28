@@ -2,12 +2,16 @@ package com.franchise.service;
 
 import com.franchise.data.dtos.request.CandidateRequest;
 import com.franchise.data.dtos.request.UpdateElectionRequest;
+import com.franchise.data.dtos.request.VoteRequest;
 import com.franchise.data.dtos.response.Reply;
 import com.franchise.data.models.Admin;
-import com.franchise.data.models.CreateElectionRequest;
+import com.franchise.data.dtos.request.CreateElectionRequest;
+import com.franchise.data.models.CandidateNames;
 import com.franchise.data.models.Election;
+import com.franchise.data.models.Votes;
 import com.franchise.data.repositories.AdminRepository;
 import com.franchise.data.repositories.ElectionRepository;
+import com.franchise.data.repositories.VotesRepository;
 import com.franchise.utils.exceptions.FranchiseException;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ElectionServiceImpl implements ElectionService {
@@ -25,13 +31,16 @@ public class ElectionServiceImpl implements ElectionService {
 
     private final AdminRepository adminRepository;
 
+    private final VotesRepository votesRepository;
+
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Autowired
-    public ElectionServiceImpl(ElectionRepository electionRepository, CandidateService candidateService, AdminRepository adminRepository) {
+    public ElectionServiceImpl(ElectionRepository electionRepository, CandidateService candidateService, AdminRepository adminRepository, VotesRepository votesRepository) {
         this.electionRepository = electionRepository;
         this.candidateService = candidateService;
         this.adminRepository = adminRepository;
+        this.votesRepository = votesRepository;
     }
 
     @Override
@@ -94,8 +103,8 @@ public class ElectionServiceImpl implements ElectionService {
     @Override
     public Object viewElection(String adminId, String electionId) {
         Admin registeredAdmin = getRegisteredAdmin(adminId);
-        electionRepository.findById(electionId);
-        return null;
+        return electionRepository.findById(electionId);
+
     }
 
     private Admin getRegisteredAdmin(String adminId) {
@@ -104,9 +113,37 @@ public class ElectionServiceImpl implements ElectionService {
     }
 
     @Override
-    public void viewAllElections(String adminId) {
+    public Object viewAllElections(String adminId) {
         Admin registeredAdmin = getRegisteredAdmin(adminId);
-        electionRepository.findAll();
+        return electionRepository.findAll();
     }
+
+    @Override
+    public List<Votes> getAllVotes() {
+        return votesRepository.findAll();
+    }
+
+    @Override
+    public List<Votes> totalVotesPerCandidate(String adminId, VoteRequest voteRequest) {
+        Admin registeredAdmin = getRegisteredAdmin(adminId);
+        List<Votes> allVotes = getAllVotes();
+        List<Votes> votesList = new ArrayList<>();
+        Votes voting = new Votes();
+        voting.setYourFavoriteCandidate(voteRequest.getYourFavoriteCandidate());
+        for (Votes vote : allVotes)
+            if(voteRequest.getYourFavoriteCandidate().equals(CandidateNames.DANIEL_LEVY))
+                votesList.add(vote);
+            else if(voteRequest.getYourFavoriteCandidate().equals(CandidateNames.MICHEAL_RAMADAN))
+                votesList.add(vote);
+            else if(voteRequest.getYourFavoriteCandidate().equals(CandidateNames.DAVID_STONEBRIDGE))
+                votesList.add(vote);
+        return votesList;
+    }
+
+//    @Override
+//    public List<Votes> getElectionResult(String adminId) {
+//
+//    }
+
 
 }

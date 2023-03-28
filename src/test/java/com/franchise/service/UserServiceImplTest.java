@@ -3,6 +3,7 @@ package com.franchise.service;
 import com.franchise.data.dtos.request.*;
 import com.franchise.data.dtos.response.Feedback;
 import com.franchise.data.dtos.response.Reply;
+import com.franchise.data.models.CandidateNames;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,34 @@ class UserServiceImplTest {
     @Test
     void testThatUserCanRegister() {
         RegistrationRequest regRequest = new RegistrationRequest();
+        RegistrationRequest regRequest2 = new RegistrationRequest();
+        RegistrationRequest regRequest3 = new RegistrationRequest();
+        RegistrationRequest regRequest4 = new RegistrationRequest();
         regRequest.setFirstName("Jesus");
         regRequest.setEmailAddress("mrjesus3003@gmail.com");
         regRequest.setLastName("Christ");
         regRequest.setPassword("Jesuschrist@33");
-        String answer = userService.register(regRequest);
+        regRequest2.setFirstName("Ajoke");
+        regRequest2.setEmailAddress("adebolexsewa@gmail.com");
+        regRequest2.setLastName("Kareem");
+        regRequest2.setPassword("Jesuschrist@33");
+        regRequest3.setFirstName("Perry");
+        regRequest3.setEmailAddress("o.taiwo@native.semicolon.africa");
+        regRequest3.setLastName("Codes");
+        regRequest3.setPassword("Jesuschrist@33");
+        regRequest4.setFirstName("Oluwadara");
+        regRequest4.setEmailAddress("taiwo94.td@gmail.com");
+        regRequest4.setLastName("Taiwo");
+        regRequest4.setPassword("Jesuschrist@33");
+        String answer = userService.register(regRequest4);
         assertEquals("Token successfully sent to your email. Please check.", answer);
     }
 
     @Test
     void testThatUserAccountIsCreatedAndVerified() {
         VerifyOtpRequest verifyOtpRequest = new VerifyOtpRequest();
-        verifyOtpRequest.setEmailAddress("mrjesus3003@gmail.com");
-        verifyOtpRequest.setToken("2628");
+        verifyOtpRequest.setEmailAddress("o.taiwo@native.semicolon.africa");
+        verifyOtpRequest.setToken("3672");
         Feedback feedback = userService.createAccount(verifyOtpRequest);
         assertEquals("Registration Successful", feedback.getMessage());
     }
@@ -87,5 +103,13 @@ class UserServiceImplTest {
         deleteRequest.setPassword("Jesusislord#247");
         String reaction = userService.deleteUser("mrjesus3003@gmail.com", deleteRequest);
         assertEquals("User deleted successfully", reaction);
+    }
+
+    @Test
+    void testThatUserCanVote() {
+        VoteRequest voteRequest = new VoteRequest();
+        voteRequest.setYourFavoriteCandidate(CandidateNames.DANIEL_LEVY);
+        Reply reply = userService.vote("mrjesus3003@gmail.com", voteRequest);
+        assertEquals("Vote casted successfully", reply.getMessage());
     }
 }

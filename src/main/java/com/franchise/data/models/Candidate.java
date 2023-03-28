@@ -14,6 +14,8 @@ public class Candidate {
     private String candidateId;
     private String firstName;
     private String lastName;
+
+    private Long numberOfVotes;
     private String aspiringPosition;
 
     public Candidate(String firstName, String lastName, String aspiringPosition) {

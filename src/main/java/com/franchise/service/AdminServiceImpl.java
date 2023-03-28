@@ -8,6 +8,7 @@ import com.franchise.data.models.Admin;
 import com.franchise.data.models.Role;
 import com.franchise.data.models.User;
 import com.franchise.data.repositories.AdminRepository;
+import com.franchise.data.repositories.CandidateRepository;
 import com.franchise.data.repositories.UserRepository;
 import com.franchise.utils.exceptions.FranchiseException;
 import com.franchise.utils.exceptions.UserServiceException;
@@ -22,13 +23,13 @@ public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
 
-//    private final UserService userService;
+    private final CandidateRepository candidateRepository;
 
     @Autowired
-    public AdminServiceImpl(UserRepository userRepository, AdminRepository adminRepository) {
+    public AdminServiceImpl(UserRepository userRepository, AdminRepository adminRepository, CandidateRepository candidateRepository) {
         this.userRepository = userRepository;
         this.adminRepository = adminRepository;
-
+        this.candidateRepository = candidateRepository;
     }
 
     @Override
@@ -40,26 +41,26 @@ public class AdminServiceImpl implements AdminService {
                 .equals("") ? updateAdminRequest.getEmailAddress() : existingUser.getEmailAddress());
         registeredAdmin.setStaffId(updateAdminRequest.getStaffId() != null && !updateAdminRequest.getStaffId().equals("")
                 ? updateAdminRequest.getStaffId() : existingUser.getStaffId());
-        registeredAdmin.setStaffId(updateAdminRequest.getStaffId() != null && !updateAdminRequest.getStaffId().equals("")
-                ? updateAdminRequest.getStaffId() : existingUser.getStaffId());
         registeredAdmin.setLastName(updateAdminRequest.getLastName() != null && !updateAdminRequest.getLastName().equals("")
                 ? updateAdminRequest.getLastName() : existingUser.getLastName());
+        updatingAdminDetails(emailAddress, updateAdminRequest, existingUser, registeredAdmin);
+        adminRepository.save(registeredAdmin);
+        return new Reply("Details updated successfully. You're now an admin!!");
+    }
+
+    private void updatingAdminDetails(String emailAddress, UpdateAdminRequest updateAdminRequest, User existingUser, Admin registeredAdmin) {
         ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
         registeredAdmin.setPassword(changePassword(emailAddress, changePasswordRequest) != null && !changePassword(emailAddress,
                 changePasswordRequest).equals("") ? changePassword(emailAddress, changePasswordRequest) : existingUser.getPassword());
-        if(userRepository.findByPhoneNumber(updateAdminRequest.getPhoneNumber()).isPresent()) {
+        registeredAdmin.setPhoneNumber(updateAdminRequest.getPhoneNumber() != null && !updateAdminRequest.getPhoneNumber().equals("")
+                ? updateAdminRequest.getPhoneNumber() : registeredAdmin.getPhoneNumber());
+        if(userRepository.findByPhoneNumber(updateAdminRequest.getPhoneNumber()).isPresent())
             throw new UserServiceException("This phone number already exists, kindly use another!!");
-        } else {
-            registeredAdmin.setPhoneNumber(updateAdminRequest.getPhoneNumber() != null && !updateAdminRequest.getPhoneNumber().equals("")
-                    ? updateAdminRequest.getPhoneNumber() : registeredAdmin.getPhoneNumber());
-        }
         registeredAdmin.setFirstName(updateAdminRequest.getFirstName() != null && !updateAdminRequest.getFirstName().equals("")
                 ? updateAdminRequest.getFirstName() : existingUser.getFirstName());
         registeredAdmin.setUniqueAdminId(updateAdminRequest.getUniqueAdminId() != null && !updateAdminRequest.getUniqueAdminId().equals("")
                 ? updateAdminRequest.getUniqueAdminId() : registeredAdmin.getUniqueAdminId());
         registeredAdmin.setUserRole(Role.ADMIN);
-        adminRepository.save(registeredAdmin);
-        return new Reply("Details updated successfully. You're now an admin!!");
     }
 
     private String changePassword(String emailAddress, ChangePasswordRequest changePasswordRequest) {
@@ -79,12 +80,44 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public String deleteAdmin(String adminId, DeleteUserRequest deleteRequest) {
-        Admin findAdmin = adminRepository.findById(adminId).orElseThrow(()
-                -> new UserServiceException("Admin is not registered"));
+        Admin findAdmin = getAdmin(adminId);
         if(BCrypt.checkpw(deleteRequest.getPassword(), findAdmin.getPassword())) {
             findAdmin.setEmailAddress("Deactivated" + " " + findAdmin.getEmailAddress());
             adminRepository.save(findAdmin);
         }
         return "User deleted successfully";
+    }
+
+    private Admin getAdmin(String adminId) {
+        return adminRepository.findById(adminId).orElseThrow(()
+                -> new UserServiceException("Admin is not registered"));
+    }
+
+    @Override
+    public Object viewCandidate(String adminId, String candidateId) {
+        Admin registeredAdmin = getAdmin(adminId);
+        return candidateRepository.findById(candidateId);
+    }
+
+    @Override
+    public Object viewAllCandidates(String adminId) {
+        Admin registeredAdmin = getAdmin(adminId);
+        return candidateRepository.findAll();
+    }
+
+    @Override
+    public String deleteUserById(String adminId, String userId) {
+        Admin registeredAdmin = getAdmin(adminId);
+        userRepository.deleteById(userId);
+        return "User deleted successfully";
+    }
+
+    @Override
+    public String deleteAllUsers(String adminId, DeleteUserRequest deleteUserRequest) {
+//        Admin registeredAdmin = getAdmin(adminId);
+//        String delete = "Deactivated User" + "  " +
+//        if(deleteUserRequest.getPassword().equals(registeredAdmin.getPassword()))
+//
+        return null;
     }
 }

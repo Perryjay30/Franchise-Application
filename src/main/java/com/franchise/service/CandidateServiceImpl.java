@@ -1,5 +1,6 @@
 package com.franchise.service;
 
+import com.franchise.data.models.Admin;
 import com.franchise.utils.exceptions.FranchiseException;
 import com.franchise.data.dtos.request.CandidateRequest;
 import com.franchise.data.models.Candidate;
@@ -60,8 +61,13 @@ public class CandidateServiceImpl implements CandidateService {
                 -> new FranchiseException("Candidate isn't registered"));
     }
 
+    private Admin getRegisteredAdmin(String adminId) {
+        return adminRepository.findById(adminId)
+                .orElseThrow(() -> new FranchiseException("Admin isn't registered"));
+    }
+
     @Override
     public List<Candidate> viewAllCandidates() {
-        return null;
+        return candidateRepository.findAll();
     }
 }

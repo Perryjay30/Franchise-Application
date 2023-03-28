@@ -2,16 +2,21 @@ package com.franchise.service;
 
 import com.franchise.data.dtos.request.CandidateRequest;
 import com.franchise.data.dtos.request.UpdateElectionRequest;
+import com.franchise.data.dtos.request.VoteRequest;
 import com.franchise.data.dtos.response.Reply;
-import com.franchise.data.models.CreateElectionRequest;
+import com.franchise.data.dtos.request.CreateElectionRequest;
+import com.franchise.data.models.CandidateNames;
 import com.franchise.data.models.Election;
 import com.franchise.data.models.ElectionType;
+import com.franchise.data.models.Votes;
 import com.franchise.utils.exceptions.FranchiseException;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -74,6 +79,14 @@ class ElectionServiceImplTest {
         editCandidate.setAspiringPosition("Chief Executive Officer");
         editElection.getUpdateCandidateRequest().add(editCandidate);
         Reply resp = electionService.updateElection("641608edf63cfa193bb4619a", "64161abf0cf7432cfd024547", "64162ae17072b221ca6d3ecd", editElection, new Election());
+    }
+
+    @Test
+    void testThatTotalOfVotesCanBeGotten() {
+        VoteRequest voteRequest = new VoteRequest();
+        voteRequest.setYourFavoriteCandidate(CandidateNames.DANIEL_LEVY);
+        List<Votes> assertVotes = electionService.totalVotesPerCandidate("642219edf0ccc674858f415f", voteRequest);
+        assertNotNull(assertVotes);
     }
 
 

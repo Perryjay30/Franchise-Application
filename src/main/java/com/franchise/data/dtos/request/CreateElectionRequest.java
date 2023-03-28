@@ -1,6 +1,6 @@
-package com.franchise.data.models;
+package com.franchise.data.dtos.request;
 
-import com.franchise.data.dtos.request.CandidateRequest;
+import com.franchise.data.models.ElectionType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 

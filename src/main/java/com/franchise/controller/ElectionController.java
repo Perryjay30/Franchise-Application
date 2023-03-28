@@ -1,8 +1,9 @@
 package com.franchise.controller;
 
 import com.franchise.data.dtos.request.UpdateElectionRequest;
+import com.franchise.data.dtos.request.VoteRequest;
 import com.franchise.data.dtos.response.ApiResponse;
-import com.franchise.data.models.CreateElectionRequest;
+import com.franchise.data.dtos.request.CreateElectionRequest;
 import com.franchise.data.models.Election;
 import com.franchise.service.ElectionService;
 import jakarta.mail.MessagingException;
@@ -28,7 +29,7 @@ public class ElectionController {
     }
 
     @PostMapping("/createElection/{adminId}")
-    public ResponseEntity<?> createElection(@Valid  @PathVariable @RequestBody String adminId, CreateElectionRequest createElectionRequest, HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> createElection(@Valid @PathVariable @RequestBody String adminId, CreateElectionRequest createElectionRequest, HttpServletRequest httpServletRequest) {
         ApiResponse response = ApiResponse.builder()
                 .timeStamp(ZonedDateTime.now())
                 .statusCode(HttpStatus.OK)
@@ -54,13 +55,40 @@ public class ElectionController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/{adminId}/{electionId}")
+    @GetMapping("viewElection/{adminId}/{electionId}")
     public ResponseEntity<?> viewElection(@PathVariable String adminId, @PathVariable String electionId, HttpServletRequest httpServletRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .timeStamp(ZonedDateTime.now())
                 .statusCode(HttpStatus.OK)
                 .path(httpServletRequest.getRequestURI())
                 .data(electionService.viewElection(adminId, electionId))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("viewAllElection/{adminId}")
+    public ResponseEntity<?> viewAllElections(@PathVariable String adminId, HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .timeStamp(ZonedDateTime.now())
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .data(electionService.viewAllElections(adminId))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("results/{adminId}")
+    public ResponseEntity<?> viewResults(@PathVariable String adminId, @RequestBody VoteRequest voteRequest,
+                                         HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .timeStamp(ZonedDateTime.now())
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .data(electionService.totalVotesPerCandidate(adminId, voteRequest))
                 .isSuccessful(true)
                 .build();
 

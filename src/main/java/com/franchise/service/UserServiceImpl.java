@@ -6,8 +6,10 @@ import com.franchise.data.dtos.response.Reply;
 import com.franchise.data.models.OtpToken;
 import com.franchise.data.models.Status;
 import com.franchise.data.models.User;
+import com.franchise.data.models.Votes;
 import com.franchise.data.repositories.OtpTokenRepository;
 import com.franchise.data.repositories.UserRepository;
+import com.franchise.data.repositories.VotesRepository;
 import com.franchise.utils.Token;
 import com.franchise.utils.Validators;
 import com.franchise.utils.exceptions.UserServiceException;
@@ -28,11 +30,14 @@ public class UserServiceImpl implements UserService {
 
     private final EmailService emailService;
 
+    private final VotesRepository votesRepository;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, OtpTokenRepository otpTokenRepository, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, OtpTokenRepository otpTokenRepository, EmailService emailService, VotesRepository votesRepository) {
         this.userRepository = userRepository;
         this.otpTokenRepository = otpTokenRepository;
         this.emailService = emailService;
+        this.votesRepository = votesRepository;
     }
 
     private User findUser(String emailAddress, String message) {
@@ -206,6 +211,15 @@ public class UserServiceImpl implements UserService {
             userRepository.save(existingUser);
         }
         return "User deleted successfully";
+    }
+
+    @Override
+    public Reply vote(String emailAddress, VoteRequest voteRequest) {
+        User voter = findUser(emailAddress, "This email isn't registered");
+        Votes userChoice = new Votes();
+        userChoice.setYourFavoriteCandidate(voteRequest.getYourFavoriteCandidate());
+        votesRepository.save(userChoice);
+        return new Reply("Vote casted successfully");
     }
 
 
