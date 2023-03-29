@@ -1,7 +1,6 @@
 package com.franchise.service;
 
 import com.franchise.data.dtos.request.UpdateElectionRequest;
-import com.franchise.data.dtos.request.VoteRequest;
 import com.franchise.data.dtos.response.Reply;
 import com.franchise.data.dtos.request.CreateElectionRequest;
 import com.franchise.data.models.Election;
@@ -18,7 +17,9 @@ public interface ElectionService {
     Object viewAllElections(String adminId);
     List<Votes> getAllVotes();
 
-    List<Votes> totalVotesPerCandidate(String adminId, VoteRequest voteRequest);
+    String totalVotesOfFirstCandidate(String adminId);
+    String totalVotesOfSecondCandidate(String adminId);
+    String totalVotesOfThirdCandidate(String adminId);
 //    List<Votes> totalVotesOfDanielLevy(String adminId);
 //    List<Votes> totalVotesOfDavidStoneBridge(String adminId);
 //    List<Votes> totalVotesOfMichealRamadan(String adminId);

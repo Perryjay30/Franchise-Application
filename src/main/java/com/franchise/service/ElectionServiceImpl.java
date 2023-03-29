@@ -2,7 +2,6 @@ package com.franchise.service;
 
 import com.franchise.data.dtos.request.CandidateRequest;
 import com.franchise.data.dtos.request.UpdateElectionRequest;
-import com.franchise.data.dtos.request.VoteRequest;
 import com.franchise.data.dtos.response.Reply;
 import com.franchise.data.models.Admin;
 import com.franchise.data.dtos.request.CreateElectionRequest;
@@ -124,26 +123,36 @@ public class ElectionServiceImpl implements ElectionService {
     }
 
     @Override
-    public List<Votes> totalVotesPerCandidate(String adminId, VoteRequest voteRequest) {
+    public String totalVotesOfFirstCandidate(String adminId) {
         Admin registeredAdmin = getRegisteredAdmin(adminId);
         List<Votes> allVotes = getAllVotes();
         List<Votes> votesList = new ArrayList<>();
-        Votes voting = new Votes();
-        voting.setYourFavoriteCandidate(voteRequest.getYourFavoriteCandidate());
         for (Votes vote : allVotes)
-            if(voteRequest.getYourFavoriteCandidate().equals(CandidateNames.DANIEL_LEVY))
+            if(vote.getYourFavoriteCandidate().equals(CandidateNames.MICHEAL_RAMADAN))
                 votesList.add(vote);
-            else if(voteRequest.getYourFavoriteCandidate().equals(CandidateNames.MICHEAL_RAMADAN))
-                votesList.add(vote);
-            else if(voteRequest.getYourFavoriteCandidate().equals(CandidateNames.DAVID_STONEBRIDGE))
-                votesList.add(vote);
-        return votesList;
+        return String.format("Total votes for MICHEAL_RAMADAN:" + "  " + votesList.size());
     }
 
-//    @Override
-//    public List<Votes> getElectionResult(String adminId) {
-//
-//    }
+    @Override
+    public String totalVotesOfSecondCandidate(String adminId) {
+        Admin registeredAdmin = getRegisteredAdmin(adminId);
+        List<Votes> allVotes = getAllVotes();
+        List<Votes> votesList = new ArrayList<>();
+        for (Votes vote : allVotes)
+            if(vote.getYourFavoriteCandidate().equals(CandidateNames.DAVID_STONEBRIDGE))
+                votesList.add(vote);
+        return String.format("Total votes for DAVID_STONEBRIDGE:" + "  " + votesList.size());
+    }
 
+    @Override
+    public String totalVotesOfThirdCandidate(String adminId) {
+        Admin registeredAdmin = getRegisteredAdmin(adminId);
+        List<Votes> allVotes = getAllVotes();
+        List<Votes> votesList = new ArrayList<>();
+        for (Votes vote : allVotes)
+            if(vote.getYourFavoriteCandidate().equals(CandidateNames.DANIEL_LEVY))
+                votesList.add(vote);
+        return String.format("Total votes for DANIEL_LEVY:" + "  " + votesList.size());
+    }
 
 }

@@ -23,6 +23,7 @@ class UserServiceImplTest {
         RegistrationRequest regRequest2 = new RegistrationRequest();
         RegistrationRequest regRequest3 = new RegistrationRequest();
         RegistrationRequest regRequest4 = new RegistrationRequest();
+        RegistrationRequest regRequest5 = new RegistrationRequest();
         regRequest.setFirstName("Jesus");
         regRequest.setEmailAddress("mrjesus3003@gmail.com");
         regRequest.setLastName("Christ");
@@ -39,15 +40,19 @@ class UserServiceImplTest {
         regRequest4.setEmailAddress("taiwo94.td@gmail.com");
         regRequest4.setLastName("Taiwo");
         regRequest4.setPassword("Jesuschrist@33");
-        String answer = userService.register(regRequest4);
+        regRequest5.setFirstName("Elijah");
+        regRequest5.setEmailAddress("okougbeninelijah003@gmail.com");
+        regRequest5.setLastName("Product Designer");
+        regRequest5.setPassword("Jesuschrist@33");
+        String answer = userService.register(regRequest5);
         assertEquals("Token successfully sent to your email. Please check.", answer);
     }
 
     @Test
     void testThatUserAccountIsCreatedAndVerified() {
         VerifyOtpRequest verifyOtpRequest = new VerifyOtpRequest();
-        verifyOtpRequest.setEmailAddress("o.taiwo@native.semicolon.africa");
-        verifyOtpRequest.setToken("3672");
+        verifyOtpRequest.setEmailAddress("okougbeninelijah003@gmail.com");
+        verifyOtpRequest.setToken("5171");
         Feedback feedback = userService.createAccount(verifyOtpRequest);
         assertEquals("Registration Successful", feedback.getMessage());
     }
@@ -108,8 +113,8 @@ class UserServiceImplTest {
     @Test
     void testThatUserCanVote() {
         VoteRequest voteRequest = new VoteRequest();
-        voteRequest.setYourFavoriteCandidate(CandidateNames.DANIEL_LEVY);
-        Reply reply = userService.vote("mrjesus3003@gmail.com", voteRequest);
+        voteRequest.setYourFavoriteCandidate(CandidateNames.MICHEAL_RAMADAN);
+        Reply reply = userService.vote("adebolexsewa@gmail.com", voteRequest);
         assertEquals("Vote casted successfully", reply.getMessage());
     }
 }

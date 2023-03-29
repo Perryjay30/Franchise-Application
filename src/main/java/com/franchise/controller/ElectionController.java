@@ -81,17 +81,47 @@ public class ElectionController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @GetMapping("results/{adminId}")
-    public ResponseEntity<?> viewResults(@PathVariable String adminId, @RequestBody VoteRequest voteRequest,
+    @GetMapping("firstCandidateResult/{adminId}")
+    public ResponseEntity<?> viewFirstCandidateResult(@PathVariable String adminId,
                                          HttpServletRequest httpServletRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .timeStamp(ZonedDateTime.now())
                 .statusCode(HttpStatus.OK)
                 .path(httpServletRequest.getRequestURI())
-                .data(electionService.totalVotesPerCandidate(adminId, voteRequest))
+                .data(electionService.totalVotesOfFirstCandidate(adminId))
                 .isSuccessful(true)
                 .build();
 
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+
+    @GetMapping("secondCandidateResult/{adminId}")
+    public ResponseEntity<?> viewSecondCandidateResult(@PathVariable String adminId,
+                                         HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .timeStamp(ZonedDateTime.now())
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .data(electionService.totalVotesOfSecondCandidate(adminId))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("thirdCandidateResult/{adminId}")
+    public ResponseEntity<?> viewThirdCandidateResult(@PathVariable String adminId,
+                                                       HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .timeStamp(ZonedDateTime.now())
+                .statusCode(HttpStatus.OK)
+                .path(httpServletRequest.getRequestURI())
+                .data(electionService.totalVotesOfThirdCandidate(adminId))
+                .isSuccessful(true)
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+
 }
