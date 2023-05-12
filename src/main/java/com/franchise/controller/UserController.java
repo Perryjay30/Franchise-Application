@@ -119,6 +119,20 @@ public class UserController {
                 path(httpServletRequest.getRequestURI()).
                 isSuccessful(true).
                 build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/vote/{emailAddress}")
+    public ResponseEntity<?> userCanVote(@PathVariable @RequestBody @Valid String emailAddress, VoteRequest voteRequest, HttpServletRequest httpServletRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .statusCode(HttpStatus.OK)
+                .data(userService.vote(emailAddress, voteRequest))
+                .timeStamp(ZonedDateTime.now())
+                .path(httpServletRequest.getRequestURI())
+                .isSuccessful(true)
+                .build();
+
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

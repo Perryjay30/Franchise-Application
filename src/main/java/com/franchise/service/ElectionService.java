@@ -20,9 +20,6 @@ public interface ElectionService {
     String totalVotesOfFirstCandidate(String adminId);
     String totalVotesOfSecondCandidate(String adminId);
     String totalVotesOfThirdCandidate(String adminId);
-//    List<Votes> totalVotesOfDanielLevy(String adminId);
-//    List<Votes> totalVotesOfDavidStoneBridge(String adminId);
-//    List<Votes> totalVotesOfMichealRamadan(String adminId);
 
 
 

@@ -1,4 +1,8 @@
 spring:
+#  security:
+#    user:
+#      name: Perry
+#      password: Oluwapelumi@30
   mail:
     host: smtp.gmail.com
     port: 465
